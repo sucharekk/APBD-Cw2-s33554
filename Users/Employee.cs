@@ -7,5 +7,6 @@ public class Employee : User
     public Employee(string name, string surname) : base(name, surname)
     {
         _userType = UserType.Employee;
+        _devicesCap = 5;
     }
 }

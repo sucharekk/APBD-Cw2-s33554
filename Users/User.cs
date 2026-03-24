@@ -10,6 +10,8 @@ public  class  User
     protected string _name;
     protected string _surname;
     protected UserType _userType;
+    protected int _devicesCap = 0;
+    protected int _devicesCount=0;
     
 
     public User( string name,string surname)
@@ -17,6 +19,7 @@ public  class  User
         _id = Random.Shared.Next(1, 10000);
         _name = name;
         _surname = surname;
+        _devicesCount = 0;
         Console.WriteLine("Welcome "+_name +" " + _surname);
     }
 
@@ -43,5 +46,17 @@ public  class  User
     {
         get => _id;
         set => _id = value;
+    }
+
+    public int DevicesCap
+    {
+        get => _devicesCap;
+        set => _devicesCap = value;
+    }
+
+    public int DevicesCount
+    {
+        get => _devicesCount;
+        set => _devicesCount = value;
     }
 }

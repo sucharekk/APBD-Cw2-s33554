@@ -54,8 +54,16 @@ public class Service
                 ReturnDevice(GetInput());
                 break;
             case 7:
+                Console.WriteLine("Input id of device you would like to mark unavailable");
+                TurnOffDevice(GetInput());
+                break;
+            case 8:
                 Console.WriteLine("Input your name <space> surname");
                 ShowUserRents(GetInput());
+                break;
+            case 9 :
+                ShowOutDatedRents();
+                break;
         }
     }
 
@@ -79,6 +87,15 @@ public class Service
             default:
                 throw new UnkownTypeException("user type");
         }
+    }
+
+
+    private void TurnOffDevice(string input)
+    {
+        int id = int.Parse(input);
+        
+        
+        
     }
 
     private Device AddDevice(string input)
@@ -122,9 +139,12 @@ public class Service
         
         if(user  is null ||  device is null)
             throw new WrongInputException("User not found or Device not available");
-        
+
+        if (user.DevicesCount + 1 > user.DevicesCap)
+            throw new TooManyDevices();
         
         _rents.Add(new Rent(user, device));
+        user.DevicesCount++;
      
         Console.WriteLine(user + " rented " + device);
         
@@ -215,6 +235,7 @@ public class Service
         if (rent is null)
             throw new WrongInputException("Rental not found");
         int fee = rent.CalculateFee();
+        user.DevicesCount--;
         _rents.Remove(rent);
         Console.WriteLine("Rental fee: " + fee + " thank you");
         
@@ -246,5 +267,14 @@ public class Service
         LookForRents(user);
 
     }
-    
+
+
+    private void ShowOutDatedRents()
+    {
+        foreach (Rent rent in _rents)
+        {
+            if(rent.CalculateFee() > 0 )
+                Console.WriteLine(rent);
+        }
+    }
 }

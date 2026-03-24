@@ -10,7 +10,7 @@ public  class  User
     protected string _name;
     protected string _surname;
     protected UserType _userType;
-    protected List<Rent> _listOfRents;
+    
 
     public User( string name,string surname)
     {
@@ -19,5 +19,29 @@ public  class  User
         _surname = surname;
         Console.WriteLine("Welcome "+_name +" " + _surname);
     }
+
+
+    public string Name
+    {
+        get => _name;
+        set => _name = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public string Surname
+    {
+        get => _surname;
+        set => _surname = value ?? throw new ArgumentNullException(nameof(value));
+    }
     
+    
+    public override string ToString()
+    {
+        return $"name {_name} | surname: {_surname}";
+    }
+
+    public int Id
+    {
+        get => _id;
+        set => _id = value;
+    }
 }

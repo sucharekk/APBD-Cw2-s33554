@@ -7,5 +7,6 @@ public class Teacher : User
     public Teacher(string name, string surname) : base(name, surname)
     {
         _userType = UserType.Teacher;
+        _devicesCap = 10;
     }
 }

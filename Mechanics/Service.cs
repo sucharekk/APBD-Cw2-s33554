@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using APBD_Cw2_s33554.Devices;
 using APBD_Cw2_s33554.Enums;
 using APBD_Cw2_s33554.Errors;
@@ -11,6 +13,13 @@ public class Service
     private List<Rent> _rents;
     private List<Device> _devices;
 
+    public Service()
+    {
+        _users = new List<User>();
+        _rents = new List<Rent>();
+        _devices = new List<Device>();
+    }
+
     public void Info()
     {
         Console.WriteLine("Starting Service");
@@ -21,13 +30,14 @@ public class Service
         Console.WriteLine("4. Show  devices to rent");
         Console.WriteLine("5. Rent device");
         Console.WriteLine("6. Return device");
-        Console.WriteLine("7. Show user rents");
-        Console.WriteLine("8. Show expired devices");
-        Console.WriteLine("9. Quick rental raport");
-        Console.WriteLine("10. Close Service");
+        Console.WriteLine("7. Turn off the device");
+        Console.WriteLine("8. Show my rentals");
+        Console.WriteLine("9. Show expired devices");
+        Console.WriteLine("10. Quick rental raport");
+        Console.WriteLine("11. EXIT");
     }
 
-    public void Program(int input)
+    public void options(int input)
     {
         switch (input)
         {
@@ -64,25 +74,29 @@ public class Service
             case 9 :
                 ShowOutDatedRents();
                 break;
+            case 10 :
+                QuickRaport();
+                break;
         }
     }
 
     private User CreateUser(string input)
     {
-        if (input.Length != 3)
-            throw new WrongInputException();
+       ;
 
         string[] tokens = ShapeInput(input);
+        if (tokens.Length != 3)
+            throw new WrongInputException();
         string name = tokens[0];
         string surname = tokens[1];
         string userType = tokens[2];
         switch (userType)
         {
-            case "Student":
+            case "student":
                 return new Student(name, surname);
-            case "Teacher":
+            case "teacher":
                 return new Teacher(name, surname);
-            case "Employee":
+            case "employee":
                 return new Employee(name, surname);
             default:
                 throw new UnkownTypeException("user type");
@@ -93,16 +107,32 @@ public class Service
     private void TurnOffDevice(string input)
     {
         int id = int.Parse(input);
+        Device searched = _devices.Find(e => e.Id==id);
         
-        
-        
+        if(searched is null)
+            throw new WrongInputException("Device not found");
+
+        searched.Quanity  =0;
+
+
+
+
+
+    }
+
+    public void QuickRaport()
+    {
+        Console.WriteLine(" We have " +_users.Count + " users");
+        Console.WriteLine(" We have " + _devices.Count + " devices");
+        Console.WriteLine(" We have " + _rents.Count + " rentals");
     }
 
     private Device AddDevice(string input)
     {
-        if (input.Length != 4)
-            throw new WrongInputException();
+        
         string[] tokens = ShapeInput(input);
+        if (tokens.Length != 4)
+            throw new WrongInputException();
         string deviceType = tokens[0];
         string model = tokens[1];
         double marketPrice = double.Parse(tokens[2]);
@@ -121,15 +151,16 @@ public class Service
             case "mouse":
                 return new Mouse(model, marketPrice, quanity);
             default:
-                throw new UnkownTypeException("device type");
+                throw new UnkownTypeException("device");
         }
     }
 
     private void RentADevice(string input)
     {
-        if (input.Length != 3)
-            throw new WrongInputException();
+        
         string[] tokens = ShapeInput(input);
+        if (tokens.Length != 3)
+            throw new WrongInputException();
         
         string name = tokens[0];
         string surname = tokens[1];
@@ -145,6 +176,7 @@ public class Service
         
         _rents.Add(new Rent(user, device));
         user.DevicesCount++;
+        device.Quanity--;
      
         Console.WriteLine(user + " rented " + device);
         
@@ -179,10 +211,12 @@ public class Service
 
     private string[] ShapeInput(string input)
     {
-        string[] tokens = input.Split("/s+");
-        foreach (string token in tokens)
+        string[] tokens = input.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < tokens.Length; i++)
         {
-            token.ToLower().Trim();
+           
+            tokens[i] = tokens[i].ToLower().Trim();
+            Console.WriteLine(tokens[i]);
         }
 
         return tokens;

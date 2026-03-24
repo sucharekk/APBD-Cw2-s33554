@@ -7,7 +7,7 @@ public class Device
     private static int _counter = 0;
     protected int _id;
     protected DeviceType _type;
-    protected bool _isAvailable;
+    protected bool _isAvailable => _quantity > 0;
     protected int _quantity;
     protected string _model;
     protected double _marketPrice;
@@ -30,12 +30,10 @@ public class Device
         set
         {
             _quantity = value;
-            _isAvailable = _quantity > 0;
-
         }
 
     }
-    public bool IsAvailable { get => _isAvailable; set => _isAvailable = value; }
+    public bool IsAvailable { get => _isAvailable;  }
     public override string ToString()
     {
         return $"id: {_id} | model: {_model} | type: {_type.ToString().ToLower()} | quantity: {_quantity} | available: {_isAvailable}";
